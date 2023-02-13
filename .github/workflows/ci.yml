@@ -17,6 +17,12 @@ jobs:
     strategy:
       matrix:
         include:
+          # We allow anonymous read access to the buckets below, but not write access (for security reasons).
+          # You can see the list of files in the buckets by visiting the following URLs:
+          # - https://s3.us-east-1.amazonaws.com/vcpkg-binary-caching-example/
+          # - https://s3.us-central-1.wasabisys.com/vcpkg-binary-caching-example/
+          # (Cloudflare R2 does not provide public access to object listing.)
+
           - name: AWS S3
             binary_source: "x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,readwrite"
             region: us-east-1
@@ -39,9 +45,10 @@ jobs:
             binary_source: "x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,read;x-aws-config,no-sign-request"
             region: us-east-1
 
-          - name: Cloudflare R2 unsigned
-            binary_source: "x-aws,s3://vcpkg-binary-caching-example/,read;x-aws-config,endpoint-url,https://pub-fc90bb777fcc4a66bd9db76890969d5c.r2.dev;x-aws-config,no-sign-request"
-            region: auto
+          # Currently Cloudflare R2 does not support `ListObjectsV2` API natively for public buckets.
+          #- name: Cloudflare R2 unsigned
+          #  binary_source: "x-aws,s3://vcpkg-binary-caching-example/,read;x-aws-config,endpoint-url,https://pub-fc90bb777fcc4a66bd9db76890969d5c.r2.dev;x-aws-config,no-sign-request"
+          #  region: auto
 
           - name: Wasabi unsigned
             binary_source: "x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,read;x-aws-config,endpoint-url,https://s3.us-central-1.wasabisys.com;x-aws-config,no-sign-request"
