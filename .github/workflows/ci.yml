@@ -68,7 +68,7 @@ jobs:
 
       - run: ./.vcpkg/vcpkg --version
 
-      - run: ./.vcpkg/vcpkg install --binarysource="${{ matrix.binary_source }}" --triplet=${{ env.TRIPLET }}
+      - run: ./.vcpkg/vcpkg install --debug --binarysource="${{ matrix.binary_source }}" --triplet=${{ env.TRIPLET }}
 
   test_args:
     name: Test arguments parsing
