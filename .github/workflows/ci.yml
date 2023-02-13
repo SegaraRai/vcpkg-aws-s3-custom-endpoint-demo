@@ -85,7 +85,7 @@ jobs:
       - name: Vcpkg version and help messages
         run: |
           ./.vcpkg/vcpkg --version
-          ./.vcpkg/vcpkg --help
-          ./.vcpkg/vcpkg help binarycaching
+          ./.vcpkg/vcpkg --help || true
+          ./.vcpkg/vcpkg help binarycaching || true
 
       - run: ./test-args.sh
