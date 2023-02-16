@@ -71,9 +71,7 @@ jobs:
             region: us-east-1
             access_key_id: AWS_ACCESS_KEY_ID
             secret_access_key: AWS_SECRET_ACCESS_KEY
-            wasabi_region: us-central-1
-            wasabi_access_key_id: WASABI_ACCESS_KEY_ID
-            wasabi_secret_access_key: WASABI_SECRET_ACCESS_KEY
+            profile_wasabi: true
 
           - name: AWS + Cloudflare R2 + Wasabi
             binary_source: "\
@@ -84,12 +82,8 @@ jobs:
             region: us-east-1
             access_key_id: AWS_ACCESS_KEY_ID
             secret_access_key: AWS_SECRET_ACCESS_KEY
-            cfr2_region: auto
-            cfr2_access_key_id: CFR2_ACCESS_KEY_ID
-            cfr2_secret_access_key: CFR2_SECRET_ACCESS_KEY
-            wasabi_region: us-central-1
-            wasabi_access_key_id: WASABI_ACCESS_KEY_ID
-            wasabi_secret_access_key: WASABI_SECRET_ACCESS_KEY
+            profile_cfr2: true
+            profile_wasabi: true
     steps:
       - uses: actions/checkout@v3
         with:
@@ -111,22 +105,22 @@ jobs:
           echo "aws_secret_access_key = ${{ secrets[matrix.secret_access_key] }}" >> ~/.aws/credentials
 
       - name: Configure AWS CLI config and credentials for profile cfr2
-        if: matrix.cfr2_region && matrix.cfr2_access_key_id && matrix.cfr2_secret_access_key
+        if: matrix.profile_cfr2
         run: |
           echo -e "\n[cfr2]" >> ~/.aws/config
-          echo "region = ${{ matrix.cfr2_region }}" >> ~/.aws/config
+          echo "region = auto" >> ~/.aws/config
           echo -e "\n[cfr2]" >> ~/.aws/credentials
-          echo "aws_access_key_id = ${{ secrets[matrix.cfr2_access_key_id] }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key = ${{ secrets[matrix.cfr2_secret_access_key] }}" >> ~/.aws/credentials
+          echo "aws_access_key_id = ${{ secrets.CFR2_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.CFR2_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
 
       - name: Configure AWS CLI config and credentials for profile wasabi
-        if: matrix.wasabi_region && matrix.wasabi_access_key_id && matrix.wasabi_secret_access_key
+        if: matrix.profile_wasabi
         run: |
           echo -e "\n[wasabi]" >> ~/.aws/config
-          echo "region = ${{ matrix.wasabi_region }}" >> ~/.aws/config
+          echo "region = us-central-1" >> ~/.aws/config
           echo -e "\n[wasabi]" >> ~/.aws/credentials
-          echo "aws_access_key_id = ${{ secrets[matrix.wasabi_access_key_id] }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key = ${{ secrets[matrix.wasabi_secret_access_key] }}" >> ~/.aws/credentials
+          echo "aws_access_key_id = ${{ secrets.WASABI_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key = ${{ secrets.WASABI_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
 
       - run: ./.vcpkg/vcpkg --version
 
