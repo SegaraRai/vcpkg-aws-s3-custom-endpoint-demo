@@ -56,8 +56,8 @@ jobs:
 
           - name: 2 Wasabi
             binary_source: "\
-              x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,readwrite,https://s3.us-central-1.wasabisys.com;\
-              x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example-2/,readwrite,https://s3.us-central-1.wasabisys.com\
+              x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,readwrite,endpoint-url=https://s3.us-central-1.wasabisys.com;\
+              x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example-2/,readwrite,endpoint-url=https://s3.us-central-1.wasabisys.com\
               "
             region: us-central-1
             access_key_id: WASABI_ACCESS_KEY_ID
@@ -144,6 +144,6 @@ jobs:
           ./.vcpkg/vcpkg --help || true
           ./.vcpkg/vcpkg help binarycaching || true
 
-      - run: ./test-args.sh
+      - run: cd test_args && ./test01.sh
 
-      - run: ./test-args-2.sh
+      - run: cd test_args && ./test02.sh
