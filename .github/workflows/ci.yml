@@ -53,6 +53,12 @@ jobs:
           - name: Wasabi unsigned
             binary_source: "x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,read;x-aws-config,endpoint-url,https://s3.us-central-1.wasabisys.com;x-aws-config,no-sign-request"
             region: us-central-1
+
+          - name: Wasabi multiple (should not work)
+            binary_source: "x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,readwrite;x-aws-config,endpoint-url,https://s3.us-central-1.wasabisys.com;x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example-2/,readwrite"
+            region: us-central-1
+            access_key_id: WASABI_ACCESS_KEY_ID
+            secret_access_key: WASABI_SECRET_ACCESS_KEY
     steps:
       - uses: actions/checkout@v3
         with:
