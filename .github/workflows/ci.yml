@@ -58,9 +58,9 @@ jobs:
             region: us-east-1
 
           # Currently Cloudflare R2 does not support `ListObjectsV2` API natively for public buckets.
-          #- name: Cloudflare R2 unsigned
-          #  binary_source: "x-aws-config,no-sign-request;x-aws,s3://vcpkg-binary-caching-example/,read,endpoint-url=https://pub-fc90bb777fcc4a66bd9db76890969d5c.r2.dev"
-          #  region: auto
+          # But we can use HTTP provider to use Cloudflare R2 bucket as a public read-only binary cache.
+          - name: Cloudflare R2 unsigned (HTTP provider)
+            binary_source: "http,https://pub-fc90bb777fcc4a66bd9db76890969d5c.r2.dev/vcpkg-binary-caching-example/{sha}.zip,read"
 
           - name: Wasabi unsigned
             binary_source: "x-aws-config,no-sign-request;x-aws,s3://vcpkg-binary-caching-example/vcpkg-binary-caching-example/,read,endpoint-url=https://s3.us-central-1.wasabisys.com"
@@ -104,6 +104,7 @@ jobs:
       - run: cp vcpkg .vcpkg/
 
       - name: Configure AWS CLI
+        if: matrix.region
         run: |
           mkdir -p ~/.aws
           echo "[default]" >> ~/.aws/config
